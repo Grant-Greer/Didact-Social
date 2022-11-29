@@ -1,14 +1,25 @@
-/// app/routes/login.tsx
 import { useState } from "react";
 import { Layout } from "~/components/layout";
 import { FormField } from "~/components/form-field";
-import { ActionFunction, json } from "@remix-run/node";
-import { login, register } from "~/utils/auth.server";
+
+import {
+  ActionFunction,
+  json,
+  LoaderFunction,
+  redirect,
+} from "@remix-run/node";
+
+import { login, register, getUser } from "~/utils/auth.server";
+
 import {
   validateEmail,
   validateName,
   validatePassword,
 } from "~/utils/validators.server";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  return (await getUser(request)) ? redirect("/") : null;
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
