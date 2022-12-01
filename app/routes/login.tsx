@@ -1,4 +1,3 @@
-// login.tsx
 import { useState, useEffect, useRef } from "react";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
@@ -14,7 +13,6 @@ import {
 import { login, register, getUser } from "~/utils/auth.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  // If there's already a user in the session, redirect to the home page
   return (await getUser(request)) ? redirect("/") : null;
 };
 
@@ -26,7 +24,6 @@ export const action: ActionFunction = async ({ request }) => {
   let firstName = form.get("firstName");
   let lastName = form.get("lastName");
 
-  // If not all data was passed, error
   if (
     typeof action !== "string" ||
     typeof email !== "string" ||
@@ -35,7 +32,6 @@ export const action: ActionFunction = async ({ request }) => {
     return json({ error: `Invalid Form Data`, form: action }, { status: 400 });
   }
 
-  // If not all data was passed, error
   if (
     action === "register" &&
     (typeof firstName !== "string" || typeof lastName !== "string")
@@ -43,7 +39,6 @@ export const action: ActionFunction = async ({ request }) => {
     return json({ error: `Invalid Form Data`, form: action }, { status: 400 });
   }
 
-  // Validate email & password
   const errors = {
     email: validateEmail(email),
     password: validatePassword(password),
@@ -55,7 +50,6 @@ export const action: ActionFunction = async ({ request }) => {
       : {}),
   };
 
-  //  If there were any errors, return them
   if (Object.values(errors).some(Boolean))
     return json(
       {
@@ -93,7 +87,6 @@ export default function Login() {
     lastName: actionData?.fields?.firstName || "",
   });
 
-  // Updates the form data when an input changes
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     field: string
@@ -102,7 +95,6 @@ export default function Login() {
   };
 
   useEffect(() => {
-    // Clear the form if we switch forms
     if (!firstLoad.current) {
       const newState = {
         email: "",
@@ -123,14 +115,12 @@ export default function Login() {
   }, [formData]);
 
   useEffect(() => {
-    // We don't want to reset errors on page load because we want to see them
     firstLoad.current = false;
   }, []);
 
   return (
     <Layout>
       <div className="h-full justify-center items-center flex flex-col gap-y-4">
-        {/* Form Switcher Button */}
         <button
           onClick={() => setAction(action == "login" ? "register" : "login")}
           className="absolute top-8 right-8 rounded-xl bg-yellow-300 font-semibold text-blue-600 px-3 py-2 transition duration-300 ease-in-out hover:bg-yellow-400 hover:-translate-y-1"
@@ -139,11 +129,11 @@ export default function Login() {
         </button>
 
         <h2 className="text-5xl font-extrabold text-yellow-300">
-          Welcome to Kudos!
+          Welcome to Didact Social!
         </h2>
         <p className="font-semibold text-slate-300">
           {action === "login"
-            ? "Log In To Give Some Praise!"
+            ? "Log In (Hello Nicholas)!"
             : "Sign Up To Get Started!"}
         </p>
         <form method="POST" className="rounded-2xl bg-gray-200 p-6 w-96">
@@ -168,7 +158,6 @@ export default function Login() {
 
           {action === "register" && (
             <>
-              {/* First Name */}
               <FormField
                 htmlFor="firstName"
                 label="First Name"
@@ -176,7 +165,6 @@ export default function Login() {
                 value={formData.firstName}
                 error={errors?.firstName}
               />
-              {/* Last Name */}
               <FormField
                 htmlFor="lastName"
                 label="Last Name"
