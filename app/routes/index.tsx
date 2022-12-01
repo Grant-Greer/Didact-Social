@@ -1,4 +1,4 @@
-import { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/node";
 import { requireUserId } from "~/utils/auth.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -8,8 +8,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Index() {
   return (
-    <div className="h-screen w-full bg-slate-600">
-      <h2 className="font-bold text-5xl text-blue-400">Hellllooooo World!</h2>
+    <div className="h-screen bg-slate-700 flex justify-center items-center">
+      <h2 className="text-blue-600 font-extrabold text-5xl">
+        TailwindCSS Is Working!
+      </h2>
     </div>
   );
 }
